@@ -17,8 +17,6 @@ class Info {
         let text_area4 = this.svg.append('g').attr('id', 'text_area4')
         let text_area5 = this.svg.append('g').attr('id', 'text_area5')
         
-        
-        
         text_area1.append("a")
             .attr("xlink:href","https://github.com/seyoun209/dataviscourse-pr-coloncancer",'_blank')
             .append("rect")  

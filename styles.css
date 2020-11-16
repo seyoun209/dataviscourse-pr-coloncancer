@@ -144,3 +144,123 @@ tr:hover .margin-bar {
     color: #454545;
     font-size: 9pt;
 }
+
+
+#qcdensity-plot .button {
+    fill: steelblue;
+}
+
+
+
+
+
+
+.button rect {
+    stroke: #999faa; /* navy 40% */
+    stroke-width: 1px;
+}
+
+.button rect.pressed {
+fill: #000f2b; /* navy 100% */
+}
+
+.button #gradient-start {
+stop-color: #999faa; /* navy 40% */
+stop-opacity: 1;
+}
+
+.button #gradient-stop {
+stop-color: #4d576b; /* navy 70% */
+stop-opacity: 1;
+}
+
+.button #gradient-start.active, .button #gradient-start.pressed {
+stop-color: #4d576b; /* navy 70% */
+}
+
+.button #gradient-stop.active, .button #gradient-stop.pressed {
+stop-color: #000f2b; /* navy 100% */
+}
+.button text {
+font-size: 20px;
+fill: #eee;
+pointer-events: none;
+text-anchor: middle;
+-moz-user-select: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+}
+.qcdensity-buttons {
+    fill: steelblue;
+
+}
+.full-width {
+    width: 100vw;
+    height: 500px;
+  }
+
+.kid-buttons-group{
+    border-style: outset;
+    padding: 5px;
+    background-color: rgb(0, 0, 0);
+}
+.kid-button{
+    border-style: outset;
+    padding: 5px;
+    background-color: rgb(155, 155, 155);
+}
+.kid-button-selected{
+    background-color: rgb(255, 155, 155);
+}
+
+circle {
+    fill: #cc9a04;
+    stroke: #000000;
+    opacity: 0.5;
+}
+
+/*
+kinder id colors
+*/
+.K4562 {
+    fill: #cc0404;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K4586 {
+    fill: #cc7c04;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K4853 {
+    fill: #ffee00;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K5234 {
+    fill: #25bb00;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K5275 {
+    fill: #004bbb;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K7646 {
+    fill: #e100ff;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}
+.K7647 {
+    fill: #fc6df0;
+    stroke: #000000;
+    stroke-width: 0px;
+    opacity: 0.5;
+}

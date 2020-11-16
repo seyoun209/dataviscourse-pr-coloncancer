@@ -35,3 +35,8 @@ jsonCombinedQC = d3.json('./data/combined_qc.json').then(qcData => {
         }
     }
 })
+
+
+jsonQcDensity = d3.json('./data/density_qc.json').then(qcdensityData => {
+    qcdensityPlot = new QcDensityPlot(qcdensityData);
+})
