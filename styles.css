@@ -63,13 +63,6 @@ td:last-of-type
     fill: steelblue;
 }
 
-td {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-right: 5px;
-    padding-left: 5px;
-    color:black;
-}
 
 #predictionTable td {
     line-height: 0;
@@ -196,21 +189,12 @@ text-anchor: middle;
 }
 .full-width {
     width: 100vw;
-    height: 500px;
+    height: 550px;
   }
 
-.kid-buttons-group{
-    border-style: outset;
-    padding: 5px;
-    background-color: rgb(0, 0, 0);
-}
 .kid-button{
-    border-style: outset;
     padding: 5px;
-    background-color: rgb(155, 155, 155);
-}
-.kid-button-selected{
-    background-color: rgb(255, 155, 155);
+    background-color: rgb(225, 225, 225);
 }
 
 circle {
@@ -224,43 +208,59 @@ kinder id colors
 */
 .K4562 {
     fill: #cc0404;
+    background-color: #cc0404;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K4586 {
     fill: #cc7c04;
+    background-color: #cc7c04;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K4853 {
     fill: #ffee00;
+    background-color: #ffee00;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K5234 {
     fill: #25bb00;
+    background-color: #25bb00;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K5275 {
     fill: #004bbb;
+    background-color: #004bbb;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K7646 {
     fill: #e100ff;
+    background-color: #e100ff;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
 }
 .K7647 {
     fill: #fc6df0;
+    background-color: #fc6df0;
     stroke: #000000;
     stroke-width: 0px;
-    opacity: 0.5;
+}
+
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+td, td:first-child, td:last-child {
+    text-align: center;
+    vertical-align: middle;
+    /* border: 1px solid black; */
+}
+.polyp-size-circle {
+    fill: red;
+    border: 1px solid red;
 }

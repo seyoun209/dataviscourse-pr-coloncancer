@@ -25,7 +25,7 @@ class TableNonpolyp {
         }); 
     }
     updateHeaders() {
-        let headerTds = d3.select('#nonpolypTableHead').selectAll('tr').data(this.headerData).selectAll('td').join('td').text(d => d.key);
+        let headerTds = d3.select('#nonpolypTableHead').selectAll('td').data(this.headerData).enter().append('td').text(d => d.key);
     }
 }
 
@@ -51,14 +51,34 @@ class TablePolyp {
     }
 
     drawTable() {
+        let that = this;
         let rowSelection = d3.select('#polypTableBody').selectAll('tr').data(this.tableData).join('tr');
         rowSelection.selectAll('td').data(d => Object.values(d)).enter().append('td').text(function(d, i){
             return d;
-        }); 
+        })
+        .on("mouseover", function(d) {
+            let selectedRow = this.parentNode.rowIndex - 1;
+            let selectedData = that.tableData[selectedRow];
+            that.polypMouseOver(selectedRow, selectedData);
+        })
+        .on("mouseout", function(d) {
+            let unselectedRow = this.parentNode.rowIndex - 1;
+            that.polypMouseOut(unselectedRow);
+        });
     }
-    
+
+    polypMouseOver(selectedRow, selectedPolyp) {
+        let polypSize = selectedPolyp["polypsize"]
+        d3.select("#colon-interactive").append("circle").attr("cx", "100").attr("cy", "100").attr("r", "100").attr("id", "polyp-" + selectedRow);
+        console.log("selected:" + selectedRow);
+    }
+    polypMouseOut(unselectedRow) {
+        d3.select("#polyp-" + unselectedRow).remove();
+        console.log("unselected:" + unselectedRow);
+    }
+
     updateHeaders() {
-        let headerTds = d3.select('#polypTableHead').selectAll('tr').data(this.headerData).join('td').text(d => d.key);
+        let headerTds = d3.select('#polypTableHead tr').selectAll("td").data(this.headerData).enter().append('td').text(d => d.key);
     }
 
     drawColon() {
@@ -66,9 +86,16 @@ class TablePolyp {
         let h = 483;
         let imgContainer = d3.select('#colon-interactive') 
         imgContainer.append("svg:image")
-            .attr("width", w).attr("height", h)
-            .attr("x", "33%").attr("y", 0)
+            .attr("width", "100%").attr("height", "90%").attr("id", "colon-image")
+            .attr("x", "0%").attr("y", "5%")
             .attr("xlink:href", "../assets/colon.png")
+
+        // table to display polyp size info
+        let polypSizes = ["<5mm", "5-9mm", "10-19mm", "20-29mm", "30-39mm", ">39mm"]
+        let polypRadiuses = [5, 9, 19, 29, 39, 49]
+        d3.select("#polyp-size-table tr:nth-child(2)").selectAll("td").data(polypSizes).enter().append("td").text(d=>d)
+        let circleSvg = d3.select("#polyp-size-table tr:nth-child(1)").selectAll("td").data(polypRadiuses).enter().append("td").append("svg").attr("width", "100%").attr('height', d=>2.25*d);
+        circleSvg.append("circle").attr("cx", "50%").attr("cy", "50%").attr("r", d=>d*0.75+"%").classed("polyp-size-circle", true)
     }
 }
 
@@ -103,7 +130,6 @@ class QcDensityPlot {
         this.kinderIds.sort();
         this.selectedKinderids = [];
         this.drawDensityPlot();
-        this.updatePlot(this.kinderIds[0]);
         this.initKinderidButtons();
 
     }
@@ -172,30 +198,24 @@ class QcDensityPlot {
                 .classed('y-label', true)
                 .style("text-anchor", "middle");
     }
-    updatePlot() {
-        let data = [];
-        for (let d of this.dataArray) {
-            if (this.selectedKinderids.includes(d.key)) {
-                data.push(d);
-            }
-        }
-        this.currentKinderid.text(this.selectedKinderids.join(" | "))
+    addDensityCircles(kid, data) {
         let that = this;
-        let circlePlot = this.svgGroup.selectAll('circle').data(data);
-        circlePlot.append('title');
         
-        let circlePlotEnter = circlePlot.enter().append('circle').attr("cx", function (d) {
+        let circlePlotEnter = this.svgGroup.append("g").classed(kid, true).selectAll('circle').data(data).enter().append('circle')
+        .attr("cx", function (d) {
             return that.margin.left + that.xScale(d.x);
-        }).attr("cy", this.height );
-
-        circlePlotEnter
-        .attr('r', 6).attr('class', d=>d.key).transition()
+        })
+        .attr("cy", this.height )
+        .attr('r', 0).attr('class', d=>d.key).transition()
         .duration(300)
         .attr("cx", function (d) { return that.margin.left + that.xScale(d.x); } )
         .attr("cy", function (d) { return that.margin.top + that.yScale(d.y); } )
+        .attr("r", 3);
 
-        circlePlot.exit().transition()
-        .duration(300).attr('r', 0).remove();
+        // circlePlot.transition().duration(300).attr('cy', this.height).remove();
+    }
+    removeDensityCircles(kid) {
+        this.svgGroup.selectAll("." + kid).selectAll("circle").transition().duration(300).attr('cy', this.height).remove();
     }
 
     initKinderidButtons() {
@@ -223,11 +243,20 @@ class QcDensityPlot {
                     if (index > -1) {
                         that.selectedKinderids.splice(index, 1);
                     }
+                    that.removeDensityCircles(kinderid);
                 } else{
                     d3.select(this.parentNode).classed(kinderid, true);
                     that.selectedKinderids.push(kid);
+
+                    let data = [];
+                    for (let d of that.dataArray) {
+                        if (d.key == kid) {
+                            data.push(d);
+                        }
+                    }
+                    that.addDensityCircles(kid, data);
                 }
-                that.updatePlot();
+                that.currentKinderid.text(that.selectedKinderids.join(" | "))
             })
         }
     }

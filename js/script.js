@@ -10,8 +10,18 @@ jsonNonpolyp.then(nonpolypData => {
 });
 
 jsonPolyp.then(polypData => {
-    headers = polypData.headers;
-    data = polypData.data;
+    let headers = [];
+
+    let headersToDisplay = {"kindred": "Kinder ID", "subjectid": "Subject ID", "site": "Site", "polyptype": "Type", "polypsize": "Size"}
+    for (let h of polypData.headers) {
+        if (h in headersToDisplay) {
+            headers.push(headersToDisplay[h]);
+        }
+    }
+    let data = polypData.data.map(function (d) { 
+        
+        return {"kindred": d.kindred, "subjectid": d.subjectid, "site": d.site, "polytype": d.polyptype, "polypsize": d.polypsize};
+    });
 
     data = data.slice(0, 20); // use only few data for quick debugging
     let tablePolyp = new TablePolyp(headers, data);
