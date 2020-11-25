@@ -14,37 +14,62 @@
         <h1>Utah Population based genetic and clinical feature in colorectal cancer</h1>
         <div id="Info_Box" class='view'>
             <span>
-                <button onclick="Genetic&Multivariate()">Genetic&Multivariate</button>
-                <button onclick="Polyps()">Polyps</button>
-                <button onclick="YouTube tutorial()">YouTube tutorial</button>
-                <button onclick="Process Book()">Process Book</button>
-                <button onclick="Contact()">Contact</button>
+                <input type="button" onclick="location.href='main.html'" value="First" />
+                <input type="button" onclick="location.href='polyps.html'" value="Polyp" />
+                <input type="button" onclick="location.href='https://www.youtube.com'" value="Youtube" />
+                <input type="button" onclick="location.href='../assets/ProjectProposal.pdf'" value="Process Book" />
+                <input type="button" onclick="location.href='https://github.com/seyoun209/dataviscourse-pr-coloncancer'" value="Github" />
             </span>
         </div>
     </header>
 
-    <div id="colon-div" style="margin-top:10px; width:100%;">
+    <div id="colon-div" style="margin-top:0px; margin-bottom:10px;width:100%; text-align: center;">
+        <div class="polyp-tooltip" style="opacity: 0;">
+        </div>
         <svg class="full-width" id="colon-interactive">
         </svg>
-        <table style='width:100%' id="polyp-size-table">
-            <tr>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-    </div>
-    
-    <div class="view">
-        <h2>Polyp</h2>
-        <table id="table2">
-            <thead id="polypTableHead">
+        <div>
+            <table style='width:1200px; text-align:center; margin: 0 auto; margin-top: 0px;' id="polyp-size-table">
+                
+                <thead>
+                    <tr><h3>Sizes</h3></tr>
+                </thead>
                 <tr>
                 </tr>
-            </thead>
+                <tr>
+                </tr>
+            </table>
+            <br>
+            <table style='width:1200px; text-align:center; margin: 0 auto; margin-top: 0px;' id="polyp-type-table">
+                <thead>
+                    <tr><h3>Types</h3></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="view" style="margin: 0 auto; text-align: center; ">
+    <h2>Polyp Data</h2>
+    <table id="table2" style="width:1200px; margin: 0 auto; margin-top: 0px;">
+        <thead id="polypTableHead">
+            <tr>
+            </tr>
+        </thead>
+    </table>
+    <div style="height:450px; width:1200px; overflow:auto; border:1px solid black;">
+        <table id="table3">
             <tbody id="polypTableBody">
             </tbody>
         </table>
     </div>
+    </div>
+
     
 <script src="js/table.js"></script>
 <script src="js/script.js"></script>

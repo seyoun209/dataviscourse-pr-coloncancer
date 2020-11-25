@@ -33,10 +33,6 @@ td:last-of-type
     text-align: right;
 }
 
-.sorting {
-    background: black;
-    color: white;
-}
 
 .sortable {
     user-select: none;
@@ -47,33 +43,26 @@ td:last-of-type
 
 .sortable:hover {
     background: #d1d1d1;
+    color: black;
 }
 
 .sortable.sorting:hover {
-    background: #232323;
-}
-
-.trump {
-    color: firebrick;
-    fill: firebrick;
-}
-
-.biden {
-    color: steelblue;
-    fill: steelblue;
+    background: #b6b6b6;
+    color: black;
 }
 
 
-#predictionTable td {
-    line-height: 0;
-}
-
-#predictionTable tbody tr {
-    cursor: pointer;
-}
-
-tbody tr:hover {
+#table1 tbody tr:hover {
     background-color: #efefef;
+    color: black;
+}
+#table2 tbody tr:hover {
+    background-color: #efefef;
+    color: black;
+}
+#table3 tbody tr:hover {
+    background-color: #efefef;
+    color: black;
 }
 
 .label{
@@ -91,8 +80,15 @@ h1 {
 }
 
 h2 {
-    color: #343651;
-
+    margin-bottom: 0;
+    margin-top: 0;
+    color: #212121;
+}
+h3 {
+    margin-bottom: 0;
+    margin-top: 0;
+    color: #212121;
+    font-size: 16px;
 }
 
 * {
@@ -137,20 +133,17 @@ tr:hover .margin-bar {
     color: #454545;
     font-size: 9pt;
 }
-
-
-#qcdensity-plot .button {
-    fill: steelblue;
+#Sex text {
+    font-size: 12px;
+    text-anchor: middle;
+    fill: black;
 }
-
-
-
-
 
 
 .button rect {
     stroke: #999faa; /* navy 40% */
     stroke-width: 1px;
+
 }
 
 .button rect.pressed {
@@ -188,79 +181,251 @@ text-anchor: middle;
 
 }
 .full-width {
-    width: 100vw;
-    height: 550px;
-  }
-
+    width: 400px;
+    height: 400px;
+}
+#Info_Box input  {
+    font-size: 20px;
+}
 .kid-button{
     padding: 5px;
     background-color: rgb(225, 225, 225);
-}
-
-circle {
-    fill: #cc9a04;
-    stroke: #000000;
-    opacity: 0.5;
+    stroke-width: 1px;
+    stroke: black;
+    cursor: pointer;
 }
 
 /*
 kinder id colors
 */
 .K4562 {
-    fill: #cc0404;
-    background-color: #cc0404;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #f22247;
+    background-color: #f22247;
+    stroke: #333333;
+    stroke-width: 0.5px;
+    color: white;
 }
 .K4586 {
-    fill: #cc7c04;
-    background-color: #cc7c04;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #f26522;
+    background-color: #f26522;
+    stroke: #333333;
+    stroke-width: 0.5px;
+    color: white;
 }
 .K4853 {
-    fill: #ffee00;
-    background-color: #ffee00;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #ffc80b;
+    background-color: #ffc80b;
+    stroke: #333333;
+    stroke-width: 0.5px;
+    color: white;
 }
 .K5234 {
-    fill: #25bb00;
-    background-color: #25bb00;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #00712a;
+    background-color: #00712a;
+    stroke: #333333;
+    stroke-width: 0.5px;
+    color: white;
 }
 .K5275 {
-    fill: #004bbb;
-    background-color: #004bbb;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #005599;
+    background-color: #005599;
+    stroke: #333333;
+    stroke-width:0.5px;
+    color: white;
 }
 .K7646 {
-    fill: #e100ff;
-    background-color: #e100ff;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #009991;
+    background-color: #009991;
+    stroke: #333333;
+    stroke-width:0.5px;
+    color: white;
 }
 .K7647 {
-    fill: #fc6df0;
-    background-color: #fc6df0;
-    stroke: #000000;
-    stroke-width: 0px;
+    fill: #6522f2;
+    background-color: #6522f2;
+    stroke: #333333;
+    stroke-width: 0.5px;
+    color: white;
 }
-
 
 table {
     border: 1px solid black;
     border-collapse: collapse;
     width: 100%;
 }
-td, td:first-child, td:last-child {
+td, td:first-child, td:last-child, th, th:first-child, th:last-child {
     text-align: center;
     vertical-align: middle;
     /* border: 1px solid black; */
 }
+#table2 td {
+    cursor: pointer;
+}
+#table1 td {
+    cursor: pointer;
+}
+.table-header {
+    font-weight: bold;
+    font-size: 18px;
+    background-color: #EEEEEE;
+}
+.table-header2 {
+    font-size: 14px;
+    background-color: #EEEEEE;
+}
+
+
+
 .polyp-size-circle {
-    fill: red;
-    border: 1px solid red;
+    fill: white;
+    stroke: #000000;
+    stroke-width: 1px;
+    opacity: 0.85;
+}
+.polyp-circle {
+    cursor: pointer;
+}
+#polypTableBody .selected {
+    background: #ffcece;
+}
+.male {
+    fill: #2247f2;
+}
+.female {
+    fill:#f22247;
+}
+.header-range {
+    fill: white;
+    stroke-width: 0.5px;
+    stroke: black;
+}
+
+.polyp-tooltip {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+  /* Tooltip text */
+.polyp-tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+  /* Show the tooltip text when you mouse over the tooltip container */
+div.polyp-tooltip {	
+    position: absolute;			
+    text-align: left;				
+    padding: 10px;
+    font: 14px sans-serif;
+    background-color: black;
+    color: #fff;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;
+    z-index: 1;		
+}
+div.nonpolyp-tooltip {	
+    position: absolute;			
+    text-align: center;				
+    padding: 5px;
+    font: 14px sans-serif;
+    background-color: black;
+    color: #fff;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;
+    z-index: 1;		
+}
+
+/* polyp types */
+.adenocarcinoma {
+    fill: #F44336;
+    background-color: #F44336;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.unknown {
+    fill: #757575;
+    background-color: #757575;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.hyperplastic {
+    fill: #3F51B5;
+    background-color: #3F51B5;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.lymphoid-hyperplasia {
+    fill: #4CAF50;
+    background-color: #4CAF50;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.lymphoid-follicle {
+    fill: #FF9800;
+    background-color: #FF9800;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.no-tissue-identified-at-pathology {
+    fill: #212121;
+    background-color: #212121;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.no-tissue-identified-at-pathology {
+    fill: #212121;
+    background-color: #212121;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.tubuloadenocarcinoma {
+    fill: #673AB7;
+    background-color: #673AB7;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.inflammatory {
+    fill: #009688;
+    background-color: #009688;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+.lymphoid-aggregate-formation {
+    fill: #795548;
+    background-color: #795548;
+    stroke: #333333;
+    stroke-width: 1px;
+    color: white;
+}
+
+/* combined qc heatmap */
+.qc-0 {
+    fill: #F44336
+}
+.qc-1 {
+    fill: #4CAF50
+}
+.qc-2 {
+    fill: #3F51B5
 }

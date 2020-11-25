@@ -14,56 +14,47 @@
         <h1>Utah Population based genetic and clinical feature in colorectal cancer</h1>
         <div id="Info_Box" class='view'>
             <span>
-                <!-- <button onclick="Genetic&Multivariate()">Genetic&Multivariate</button>
-                <button onclick="Polyps()">Polyps</button>
-                <button onclick="YouTube tutorial()">YouTube tutorial</button>
-                <button onclick="Process Book()">Process Book</button>
-                <button onclick="Contact()">Contact</button> -->
+                <input type="button" onclick="location.href='main.html'" value="First" />
+                <input type="button" onclick="location.href='polyps.html'" value="Polyp" />
+                <input type="button" onclick="location.href='https://www.youtube.com'" value="Youtube" />
+                <input type="button" onclick="location.href='../assets/ProjectProposal.pdf'" value="Process Book" />
+                <input type="button" onclick="location.href='https://github.com/seyoun209/dataviscourse-pr-coloncancer'" value="Github" />
             </span>
         </div>
     </header>
 
-    <nav>
-        <a class="info" href="main.html"></a>
 
+    <div style="width: 1200px; margin:0 auto;">
         <div>
-            <ul>
-                <li class="nav-item">
-                    <a class="nav-link" href="polyps.html">Polyps</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Proposal_final_sy_hj.pdf">Project Proposal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.youtube.com/watch?v=l0GN40EL1VU">YouTube Tutorial</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-                
-            </ul>
-
-                <button style="padding: 0px 10px" id="toggleInfoButton">Description</button>
-               
+            <div id="qcdensity-plot" style="float: left; width: 50%; text-align: center; margin-bottom:10px;">
+            </div>
             
+            <div id="combinedqc-plot" style="float: left; width: 50%; text-align: center; margin-bottom:10px;">
+            </div>
         </div>
-    </nav>
+        
+        <div style="float: left; width: 85%;">
+            <div class="nonpolyp-tooltip" style="opacity: 0;">
+            </div>
+            <h2></h2>
+            <table id="table1">
+                <thead>
+                    <tr>
+                    </tr>
+                    <tr>
+                    </tr>
+                </thead>
 
-    <div class="view">
-        <h2></h2>
-
-        <table id="table1">
-            <thead id="nonpolypTableHead">
-                <tr>
-                </tr>
-            </thead>
-            <tbody id="nonpolypTableBody">
-            </tbody>
-        </table>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="description-box" style="float: right; width: 15%;">
+        </div>
+        <br style="clear: left;"/>
     </div>
+    
 
-    <div class="view", id="qcdensity-plot">
-    </div>
 <script src="js/table.js"></script>
 <script src="js/script.js"></script>
 <script src="js/info.js"></script>
