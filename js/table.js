@@ -122,16 +122,18 @@ class TableNonpolyp {
                 trow.on("click", function(d, i) {
                     let rowIndex = this.id;
                     let selectedSubjectId = that.tableData[rowIndex].subjectid;
-                    
+                    let kid = that.tableData[rowIndex].kindred;
+                    let classkid = "K" + kid;
+
                     let selected = d3.select(this);
-                    if (selected.classed("row-selected")) {
-                        selected.classed("row-selected", false);
+                    if (selected.classed(classkid)) {
+                        selected.classed(classkid, false);
                         let existIndex = selectedSubjectIds.indexOf(selectedSubjectId);
                         if (existIndex > -1) {
                             selectedSubjectIds.splice(existIndex, 1);
                         }
                     } else {
-                        selected.classed("row-selected", true);
+                        selected.classed(classkid, true);
                         selectedSubjectIds.push(selectedSubjectId);
                     }
                     that.combinedQcPlot.drawSquares();
@@ -796,7 +798,7 @@ class CombinedQcPlot {
         this.y2 = 200;
 
         this.rectSize = 9.5;
-        this.margin = { top: 20, right: 0, bottom: 60, left: 35 };
+        this.margin = { top: 35, right: 0, bottom: 60, left: 35 };
         this.margin2 = {left: 50};
         this.width = this.rectSize*198;
         this.height = this.rectSize*30;
@@ -843,17 +845,17 @@ class CombinedQcPlot {
             .attr("text-anchor", "middle");
             
         this.svgGroup.append('text').attr('id', 'yText').text("SNP IDs")
-            .attr("transform", "rotate(-90)")
-            .attr("x", - this.height/2 - this.margin.top)
-            .attr("y", this.margin.left - 20)
-            .attr("text-anchor", "middle");
+        .attr("x", this.margin.left - 10)
+        .attr("y", this.margin.top - 5)
+            .attr("text-anchor", "start");
 
+        let infoboxHeight = 25;
         let infoGroup = d3.select('#combinedqc-plot').select('.plot-svg').append("g");
         infoGroup.append("rect")
             .attr("width", that.infoBoxWidth)
-            .attr("height", "28px")
-            .attr("x", that.margin.left  + that.margin2.left + that.width / 2 - that.infoBoxWidth / 2)
-            .attr("y", that.margin.top + that.height + 10)
+            .attr("height", infoboxHeight + "px")
+            .attr("x", that.margin.left + that.width - that.infoBoxWidth)
+            .attr("y", that.margin.top - infoboxHeight - 5)
             .attr("fill", "white")
             .attr("stroke", "lightgray")
             .attr("stroke-width", "1px")
@@ -863,25 +865,25 @@ class CombinedQcPlot {
         infoGroup.selectAll("rect").data(samples).enter().append("rect")
         .attr("width", this.rectSize*2).attr("height", this.rectSize*2)
         .attr("x", function(d) {
-            return that.margin.left + that.margin2.left +that.infoBoxWidth / 12 + that.width / 2 - that.infoBoxWidth / 2 + that.infoBoxWidth / 3 * d;
+            return that.margin.left +that.infoBoxWidth / 12 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d;
         })
         .attr("y", function(d) {
-            return that.margin.top + that.height + 10 + that.rectSize/2;
+            return that.margin.top - infoboxHeight - 2.;
         })
         .attr("class", d=>"qc-"+d);
 
         infoGroup.selectAll("text").data(samples).enter().append("text")
         .attr("x", function(d) {
-            return that.margin.left + that.margin2.left + that.infoBoxWidth / 12 + that.width / 2 - that.infoBoxWidth / 2 + that.infoBoxWidth / 3 * d + that.rectSize*3;
+            return that.margin.left + that.infoBoxWidth / 12 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*3;
         })
         .attr("y", function(d) {
-            return that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*1.75;
+            return that.margin.top - infoboxHeight + 14;
         })
         .text(d=>d);
         
         infoGroup.append("text")
-        .attr("x", that.margin.left + that.margin2.left+ that.width / 2 - that.infoBoxWidth / 2 - that.rectSize*2)
-        .attr("y", that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*1.75)
+        .attr("x", that.margin.left + that.width - that.infoBoxWidth - that.rectSize)
+        .attr("y", that.margin.top - 10)
         .text("Number of Samples:")
         .attr("font-size", "16px")
         .attr("text-anchor", "end");

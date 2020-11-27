@@ -76,6 +76,7 @@ td:last-of-type
 
 h1 {
     margin-top: 0;
+    margin-bottom: 5px;
     color: black;
 }
 
@@ -361,6 +362,12 @@ div.nonpolyp-tooltip {
     pointer-events: none;
     z-index: 1;		
 }
+#description-box {
+    border: 1px solid black;
+}
+#author-table {
+    font-size: 20px;
+}
 .info-button:hover {
     background-color: darkgray;
     color: white;
@@ -372,13 +379,13 @@ div.nonpolyp-tooltip {
 }
 .info-button {
     display: inline-block;
-    width: 12%;
+    width: 250px;
     border: none;
     background-color: lightgray;
     padding: 5px 10px 5px 10px;
     margin-left: 5px;
     margin-right: 5px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     text-align: center;
     border-radius: 8px;
@@ -457,13 +464,19 @@ div.nonpolyp-tooltip {
 
 /* combined qc heatmap */
 .qc-0 {
-    fill: #F44336
+    fill: #F44336;
+    stroke: white;
+    stroke-width: 0.1px;
 }
 .qc-1 {
-    fill: #4CAF50
+    fill: #4CAF50;
+    stroke: white;
+    stroke-width: 0.1px;
 }
 .qc-2 {
-    fill: #3F51B5
+    fill: #3F51B5;
+    stroke: white;
+    stroke-width: 0.1px;
 }
 
 .qc-unselected {
