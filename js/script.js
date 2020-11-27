@@ -1,3 +1,10 @@
+function initQcDensityPlot(tableNonpolyp, combinedQcPlot) {
+    jsonQcDensity = d3.json('./data/density_qc.json').then(qcdensityData => {
+        qcdensityPlot = new QcDensityPlot(qcdensityData, tableNonpolyp, combinedQcPlot);
+        tableNonpolyp.setCombinedQcPlot(combinedQcPlot);
+    });
+}
+
 jsonNonpolyp = d3.json('./data/non_polyp.json');
 jsonPolyp = d3.json('./data/polyp.json');
 
@@ -26,10 +33,14 @@ jsonNonpolyp.then(nonpolypData => {
     // data = data.slice(0, 20); // use only few data for quick debugging
     let tableNonpolyp = new TableNonpolyp(headers, data);
 
-    jsonQcDensity = d3.json('./data/density_qc.json').then(qcdensityData => {
-        qcdensityPlot = new QcDensityPlot(qcdensityData, tableNonpolyp);
+    jsonCombinedQC = d3.json('./data/combined_qc.json').then(qcData => {
+        headers = qcData.headers;
+        console.log(headers);
+        data = qcData.data;
+        combinedQc = new CombinedQcPlot(data);
+        initQcDensityPlot(tableNonpolyp, combinedQc);
     })
-    
+
 });
 jsonPolyp.then(polypData => {
     let headers = [];
@@ -47,23 +58,3 @@ jsonPolyp.then(polypData => {
     // data = data.slice(0, 20); // use only few data for quick debugging
     let tablePolyp = new TablePolyp(headers, data);
 });
-
-jsonCombinedQC = d3.json('./data/combined_qc.json').then(qcData => {
-    headers = qcData.headers;
-    console.log(headers);
-    data = qcData.data;
-    
-    // data = data.slice(0, 10); // use only few data for quick debugging
-    // for (let d of data) {
-    //     console.log("==============================");
-    //     for (let header of headers) {
-    //         if (header == "samples") {
-    //             console.log("    " + header + ":" + d[header].length + " samples");
-    //         } else {
-    //             console.log("    " + header + ":" + d[header]);
-    //         }
-    //     }
-    // }
-    
-    let combinedQc = new CombinedQcPlot(data);
-})

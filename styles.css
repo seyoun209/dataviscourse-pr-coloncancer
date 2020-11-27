@@ -76,7 +76,7 @@ td:last-of-type
 
 h1 {
     margin-top: 0;
-    color: #343651;
+    color: black;
 }
 
 h2 {
@@ -189,10 +189,25 @@ text-anchor: middle;
 }
 .kid-button{
     padding: 5px;
-    background-color: rgb(225, 225, 225);
-    stroke-width: 1px;
-    stroke: black;
+    background-color: white;
+    fill: lightgray;
+    stroke-width: 0.5px;
+    stroke: #333333;
     cursor: pointer;
+}
+.kid-button-text {
+    cursor: pointer;
+    pointer-events: none;
+}
+.kid-button-text-selected {
+    cursor: pointer;
+    pointer-events: none;
+    color: white;
+    fill: white;
+}
+
+.row-selected {
+    background-color: yellow;
 }
 
 /*
@@ -346,7 +361,28 @@ div.nonpolyp-tooltip {
     pointer-events: none;
     z-index: 1;		
 }
-
+.info-button:hover {
+    background-color: darkgray;
+    color: white;
+}
+.info-button {
+    background-color: lightgray;
+    box-shadow: 0 3px gray;
+    transform: translateY(1px);
+}
+.info-button {
+    display: inline-block;
+    width: 12%;
+    border: none;
+    background-color: lightgray;
+    padding: 5px 10px 5px 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+}
 /* polyp types */
 .adenocarcinoma {
     fill: #F44336;
@@ -428,4 +464,11 @@ div.nonpolyp-tooltip {
 }
 .qc-2 {
     fill: #3F51B5
+}
+
+.qc-unselected {
+    opacity: 0.5;
+}
+.qc-selected {
+    opacity: 1.0;
 }

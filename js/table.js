@@ -1,9 +1,12 @@
 var selectedKinderids = [];
 var selectedPolypIndex = -1;
+var selectedSubjectIds = [];
 
 class TableNonpolyp {
     constructor(headers, data) {
         this.name = "TableNonpolyp";
+        this.combinedQcPlot = null;
+
         this.tableRowHeight = 20;
         this.sexSqrSize = 15;
 
@@ -64,7 +67,7 @@ class TableNonpolyp {
         this.initHeaders();
         this.updateHeaders();
         this.attachSortHandlers();
-        this.drawTable();
+        // this.drawTable();
     }
 
     drawTable() {
@@ -76,7 +79,7 @@ class TableNonpolyp {
 
         tableData.forEach(function(d, i) {
             if (!d['hidden']) {
-                let trow = d3.select('#table1 tbody').append("tr");
+                let trow = d3.select('#table1 tbody').append("tr").attr("id", i);
                 for (let key of keyOrder) {
                     let val = d[key];
                     if (key == "sex") {
@@ -86,7 +89,8 @@ class TableNonpolyp {
                         } else if(val == "F") {
                             className = "female";
                         }
-                        let rect = trow.append("td").append("svg").attr("width", "100%").attr("height", that.tableRowHeight).append("rect").attr("width", that.sexSqrSize).attr("height", that.sexSqrSize).attr("x", 55-that.sexSqrSize/2 + "%").attr("y", "25%").classed(className, true);
+                        let row = trow.append("td").append("svg").attr("width", "100%").attr("height", that.tableRowHeight)
+                        let rect = row.append("rect").attr("width", that.sexSqrSize).attr("height", that.sexSqrSize).attr("x", 55-that.sexSqrSize/2 + "%").attr("y", "25%").classed(className, true);
                         rect.on("mouseover", function(d) {
                             let boundingRect = this.parentNode.parentNode.getBoundingClientRect();
                             let x = boundingRect.x + window.scrollX;
@@ -115,10 +119,31 @@ class TableNonpolyp {
                         }
                     }
                 }
+                trow.on("click", function(d, i) {
+                    let rowIndex = this.id;
+                    let selectedSubjectId = that.tableData[rowIndex].subjectid;
+                    
+                    let selected = d3.select(this);
+                    if (selected.classed("row-selected")) {
+                        selected.classed("row-selected", false);
+                        let existIndex = selectedSubjectIds.indexOf(selectedSubjectId);
+                        if (existIndex > -1) {
+                            selectedSubjectIds.splice(existIndex, 1);
+                        }
+                    } else {
+                        selected.classed("row-selected", true);
+                        selectedSubjectIds.push(selectedSubjectId);
+                    }
+                    that.combinedQcPlot.drawSquares();
+                })
             }
         });
     }
-
+    setCombinedQcPlot(combinedQcPlot) {
+        console.log("setCombinedQcPlot");
+        this.combinedQcPlot = combinedQcPlot;
+        this.drawTable();
+    }
     updateRangedRow(row, key, val) {
         let that = this;
         let min = this.minmaxs[key][0];
@@ -564,9 +589,9 @@ class QcDensityPlot {
         this.nonpolypTable = nonpolypTable;
         this.combinedQcPlot = combinedQcPlot;
 
-        this.margin = { top: 20, right: 40, bottom: 60, left: 60 };
+        this.margin = { top: 20, right: 40, bottom: 35, left: 60 };
         this.width = 600 - this.margin.left - this.margin.right;
-        this.height = 250 - this.margin.top - this.margin.bottom;
+        this.height = 225 - this.margin.top - this.margin.bottom;
 
         this.dataArray = dataArray;
         // pre-compute min, ax values across all data
@@ -593,6 +618,7 @@ class QcDensityPlot {
 
     drawDensityPlot() {
         d3.select('#qcdensity-plot')
+            .append("div").style("display", "inline-block").style("vertical-align", "top")
             .append('svg').classed('plot-svg', true)
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -681,30 +707,47 @@ class QcDensityPlot {
         let that = this;
         let width = 1000;
         let height = 150;
-        let margin = { top: 20, right: 20, bottom: 60, left: 80 };
+        let margin = { top: 0, right: 20, bottom: 0, left: 80 };
 
         let buttonWidth = 75;
-        let buttonHeight = 20;
+        let buttonHeight = 30;
         let buttonDiv = d3.select('#qcdensity-plot')
-            .append('div').classed('kid-buttons-group', true)
+            .append('div').classed('kid-buttons-group', true).style("display", "inline-block").style("vertical-align", "top")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            
+            .attr("height", height + margin.top + margin.bottom).append("svg").append('g')
+        
+        
+        let i = 0
         for (let kid of this.kinderIds) {
             buttonDiv.append("rect")
-            .attr("class", "kid-button").attr("width", buttonWidth).attr("height", buttonHeight)
-            .append("text").text(kid).attr("text-anchor", "middle").attr("alignment-baseline", "middle").attr("x", "100%").attr("y", "100%").attr("id", kid)
-            .on("click", function(d) {
+            .attr("class", "kid-button").attr("width", buttonWidth).attr("height", buttonHeight).attr("id", kid)
+            .attr("x", function(d) {
+                if (i < 4) {
+                    return i*buttonWidth + "px";
+                } else {
+                    return (i-3.5)*buttonWidth + "px";
+                }
+            })
+            .attr("y", function(d){
+                if (i < 4) {
+                    return "0px";
+                } else {
+                    return buttonHeight + "px";
+                }
+            }).on("click", function(d) {
                 let kinderid = d.path[0].id;
-                if (d3.select(this.parentNode).classed(kinderid)) {
-                    d3.select(this.parentNode).classed(kinderid, false);
+                
+                if (d3.select(this).classed(kinderid)) {
+                    d3.select(this).classed(kinderid, false);
                     const index = selectedKinderids.indexOf(kinderid);
                     if (index > -1) {
                         selectedKinderids.splice(index, 1);
                     }
                     that.removeDensityCircles(kinderid);
+
+                    d3.select('#text-'+kid).attr("class", "kid-button-text");
                 } else{
-                    d3.select(this.parentNode).classed(kinderid, true);
+                    d3.select(this).classed(kinderid, true);
                     selectedKinderids.push(kid);
 
                     let data = [];
@@ -714,11 +757,29 @@ class QcDensityPlot {
                         }
                     }
                     that.addDensityCircles(kid, data);
+
+                    d3.select('#text-'+kid).attr("class", "kid-button-text-selected");
                 }
                 that.currentKinderid.text(selectedKinderids.join(" | "))
                 that.nonpolypTable.filterByKinderid();
-                that.combinedQcPlot.drawSquares();
+            });
+
+            buttonDiv.append("text").attr("id", "text-"+kid).attr("class", "kid-button-text").text(kid).attr("text-anchor", "middle").attr("alignment-baseline", "middle").attr("x", function(d) {
+                if (i < 4) {
+                    return i*buttonWidth + buttonWidth/2 + "px";
+                } else {
+                    return (i-3.5)*buttonWidth + buttonWidth/2 + "px";
+                }
             })
+            .attr("y", function(d){
+                if (i < 4) {
+                    return  buttonHeight/2 + "px";
+                } else {
+                    return buttonHeight + buttonHeight/2 + "px";
+                }
+            })
+            
+            i += 1;
         }
     }
 }
@@ -734,12 +795,12 @@ class CombinedQcPlot {
         this.y1 = 0;
         this.y2 = 200;
 
-        this.rectSize = 4.;
-        this.margin = { top: 20, right: 40, bottom: 60, left: 10 };
+        this.rectSize = 9.5;
+        this.margin = { top: 20, right: 0, bottom: 60, left: 35 };
         this.margin2 = {left: 50};
         this.width = this.rectSize*198;
         this.height = this.rectSize*30;
-        this.infoBoxWidth = 150;
+        this.infoBoxWidth = 200;
 
         this.initHeatmap();
         this.drawSquares();
@@ -755,7 +816,6 @@ class CombinedQcPlot {
         this.svgGroup = d3.select('#combinedqc-plot').select('.plot-svg').append('g').classed('wrapper-group', true);
     
         let xaxis = this.svgGroup.append('g').attr('id', 'x-axis')
-
         let yaxis = this.svgGroup.append('g').attr('id', 'y-axis');
 
         // xaxis.append("line").style("stroke", "black").style("stroke-width", "1px")
@@ -775,7 +835,7 @@ class CombinedQcPlot {
             .attr("y", function(d, i) {
                 return that.margin.top + (i+1)*that.rectSize;
             })
-            .style("font-size", "5px");
+            .style("font-size", "11px");
 
         this.svgGroup.append('text').attr('id', 'xText').text("Subject IDs")
             .attr("x", this.margin.left  + this.margin2.left + this.width/2)
@@ -785,13 +845,13 @@ class CombinedQcPlot {
         this.svgGroup.append('text').attr('id', 'yText').text("SNP IDs")
             .attr("transform", "rotate(-90)")
             .attr("x", - this.height/2 - this.margin.top)
-            .attr("y", this.margin.left + 10)
+            .attr("y", this.margin.left - 20)
             .attr("text-anchor", "middle");
 
         let infoGroup = d3.select('#combinedqc-plot').select('.plot-svg').append("g");
         infoGroup.append("rect")
             .attr("width", that.infoBoxWidth)
-            .attr("height", "20px")
+            .attr("height", "28px")
             .attr("x", that.margin.left  + that.margin2.left + that.width / 2 - that.infoBoxWidth / 2)
             .attr("y", that.margin.top + that.height + 10)
             .attr("fill", "white")
@@ -801,7 +861,7 @@ class CombinedQcPlot {
         infoGroup = d3.select('#combinedqc-plot').select('.plot-svg').append("g");
         let samples = [0, 1, 2]
         infoGroup.selectAll("rect").data(samples).enter().append("rect")
-        .attr("width", this.rectSize*4).attr("height", this.rectSize*4)
+        .attr("width", this.rectSize*2).attr("height", this.rectSize*2)
         .attr("x", function(d) {
             return that.margin.left + that.margin2.left +that.infoBoxWidth / 12 + that.width / 2 - that.infoBoxWidth / 2 + that.infoBoxWidth / 3 * d;
         })
@@ -812,18 +872,18 @@ class CombinedQcPlot {
 
         infoGroup.selectAll("text").data(samples).enter().append("text")
         .attr("x", function(d) {
-            return that.margin.left + that.margin2.left + that.infoBoxWidth / 12 + that.width / 2 - that.infoBoxWidth / 2 + that.infoBoxWidth / 3 * d + that.rectSize*5;
+            return that.margin.left + that.margin2.left + that.infoBoxWidth / 12 + that.width / 2 - that.infoBoxWidth / 2 + that.infoBoxWidth / 3 * d + that.rectSize*3;
         })
         .attr("y", function(d) {
-            return that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*3.5;
+            return that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*1.75;
         })
         .text(d=>d);
         
         infoGroup.append("text")
         .attr("x", that.margin.left + that.margin2.left+ that.width / 2 - that.infoBoxWidth / 2 - that.rectSize*2)
-        .attr("y", that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*3)
+        .attr("y", that.margin.top + that.height + 10 + that.rectSize/2 + that.rectSize*1.75)
         .text("Number of Samples:")
-        .attr("font-size", "14px")
+        .attr("font-size", "16px")
         .attr("text-anchor", "end");
     }
     drawSquares() {
@@ -832,7 +892,6 @@ class CombinedQcPlot {
             return d.snp;
         });
 
-        console.log(selectedKinderids)
         let nRow = 0;
         for(let d of this.dataArray) {
             let snp = d.snp;
@@ -844,11 +903,16 @@ class CombinedQcPlot {
                 return that.margin.top + nRow*that.rectSize;
             })
             .attr("class", function(d2, i) {
-                let kid = d2.family_id;
-                if (selectedKinderids.includes(kid)) {
-                    
+                let patent_id = d2.patent_id;
+                if (selectedSubjectIds.length > 0) {
+                    if (selectedSubjectIds.includes(patent_id)) {
+                        console.log(patent_id)
+                        return "qc-"+d2.num_samples + " qc-selected";
+                    }
+                    return "qc-"+d2.num_samples + " qc-unselected";
+                } else {
+                    return "qc-"+d2.num_samples + " qc-selected";
                 }
-                return "qc-"+d2.num_samples;
             })
             nRow += 1;
         }
