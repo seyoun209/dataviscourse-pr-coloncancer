@@ -853,8 +853,8 @@ class CombinedQcPlot {
         this.y1 = 0;
         this.y2 = 200;
 
-        this.rectSize = 12;
-        this.margin = { top: 35, right: 0, bottom: 60, left: 35 };
+        this.rectSize = 8.75;
+        this.margin = { top: 35, right: 10, bottom: 60, left: 25 };
         this.margin2 = {left: 50};
         this.width = this.rectSize*203;
         this.height = this.rectSize*30;
@@ -907,7 +907,7 @@ class CombinedQcPlot {
             .attr("y", function(d, i) {
                 return that.margin.top + (i+1)*that.rectSize;
             })
-            .style("font-size", "14px");
+            .style("font-size", "12px");
 
         this.svgGroup.append('text').attr('id', 'xText').text("Subject IDs")
             .attr("x", this.margin.left + this.width/2)
@@ -938,7 +938,7 @@ class CombinedQcPlot {
             return that.margin.left +that.infoBoxWidth / 15 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d - that.rectSize;
         })
         .attr("y", function(d) {
-            return that.margin.top - infoboxHeight - 3.25;
+            return that.margin.top - infoboxHeight - 1.5;
         })
         .attr("class", d=>"qc-"+d);
 
@@ -947,7 +947,7 @@ class CombinedQcPlot {
             return that.margin.left + that.rectSize/2 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*2.5 - that.rectSize;
         })
         .attr("y", function(d) {
-            return that.margin.top - infoboxHeight + 12;
+            return that.margin.top - infoboxHeight + 11;
         })
         .text(d=>d);
         
