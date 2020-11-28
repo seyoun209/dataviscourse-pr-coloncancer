@@ -6,7 +6,7 @@ function initQcDensityPlot(tableNonpolyp, combinedQcPlot) {
 }
 
 jsonNonpolyp = d3.json('./data/non_polyp.json');
-jsonPolyp = d3.json('./data/polyp.json');
+jsonPolyp = d3.json('./data/polyp_v2.json');
 jsonCombinedQc = d3.json("./data/combined_qc.json");
 
 jsonCombinedQc.then(qcData => {
@@ -63,7 +63,7 @@ jsonPolyp.then(polypData => {
         }
     }
     let data = polypData.data.map(function (d, i) {
-        return {"kindred": d.kindred, "subjectid": d.subjectid, "site": d.site, "polytype": d.polyptype, "polypsize": d.polypsize, "selected": false, "index": i};
+        return {"kindred": d.kindred, "subjectid": d.s1_LabID_CRCid, "site": d.site, "polytype": d.polyptype, "polypsize": d.polypsize, "selected": false, "index": i};
     });
 
     // data = data.slice(0, 20); // use only few data for quick debugging
