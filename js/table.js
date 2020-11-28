@@ -140,6 +140,19 @@ class TableNonpolyp {
                     }
                     that.combinedQcPlot.drawSquares();
                 })
+                trow.attr("class", function(d) {
+                    let rowIndex = this.id;
+                    let selectedSubjectId = that.tableData[rowIndex].subjectid;
+                    let kid = that.tableData[rowIndex].kindred;
+                    let classkid = "K" + kid;
+
+                    let selected = d3.select(this);
+                    if (selectedSubjectIds.includes(""+selectedSubjectId) == false) {
+                        return "";
+                    } else {
+                        return classkid;
+                    }
+                })
             }
         });
     }
@@ -815,7 +828,6 @@ class QcDensityPlot {
                 }
                 that.currentKinderid.text(selectedKinderids.join(" | "))
                 that.nonpolypTable.filterByKinderid();
-                
             });
 
             buttonDiv.append("text").attr("id", "text-"+kid).attr("class", "kid-button-text").text(kid).attr("text-anchor", "middle").attr("alignment-baseline", "middle").attr("x", function(d) {
@@ -841,13 +853,12 @@ class CombinedQcPlot {
         this.y1 = 0;
         this.y2 = 200;
 
-        this.rectSize = 13;
+        this.rectSize = 12;
         this.margin = { top: 35, right: 0, bottom: 60, left: 35 };
         this.margin2 = {left: 50};
         this.width = this.rectSize*203;
         this.height = this.rectSize*30;
-        this.infoBoxWidth = 200;
-
+        this.infoBoxWidth = 180;
         this.initHeatmap();
         this.drawSquares();
     }
@@ -867,7 +878,7 @@ class CombinedQcPlot {
             let x = d.x + window.scrollX;
             let y = d.y + window.scrollY;
             
-            plotTooltip.html("<b>[Heatmap]</b><br>Heatmap of 30 SNP genotype data of 199 samples. 0 is Homozygous non-reference, 1 is heterozygous, and 2 is homozygous reference.")
+            plotTooltip.html("<b>[Heatmap]</b><br>Heatmap of 30 SNP genotype data of 198 samples. 0 is Homozygous non-reference, 1 is heterozygous, and 2 is homozygous reference.")
             .style("left", x - tooltipW2/2 + "px").style("top", y + tooltipH2/2  - 20 + "px")
             .transition().duration(100).style("opacity", .9);
         }).on("mouseout", function(d) {
@@ -913,7 +924,7 @@ class CombinedQcPlot {
         infoGroup.append("rect")
             .attr("width", that.infoBoxWidth)
             .attr("height", infoboxHeight + "px")
-            .attr("x", that.margin.left + that.width - that.infoBoxWidth)
+            .attr("x", that.margin.left + that.width - that.infoBoxWidth - that.rectSize)
             .attr("y", that.margin.top - infoboxHeight - 5)
             .attr("fill", "white")
             .attr("stroke", "lightgray")
@@ -924,16 +935,16 @@ class CombinedQcPlot {
         infoGroup.selectAll("rect").data(samples).enter().append("rect")
         .attr("width", this.rectSize*1.5).attr("height", this.rectSize*1.5)
         .attr("x", function(d) {
-            return that.margin.left +that.infoBoxWidth / 15 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d;
+            return that.margin.left +that.infoBoxWidth / 15 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d - that.rectSize;
         })
         .attr("y", function(d) {
-            return that.margin.top - infoboxHeight - 2.;
+            return that.margin.top - infoboxHeight - 3.25;
         })
         .attr("class", d=>"qc-"+d);
 
         infoGroup.selectAll("text").data(samples).enter().append("text")
         .attr("x", function(d) {
-            return that.margin.left + that.rectSize/2 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*3;
+            return that.margin.left + that.rectSize/2 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*2.5 - that.rectSize;
         })
         .attr("y", function(d) {
             return that.margin.top - infoboxHeight + 12;
@@ -941,7 +952,7 @@ class CombinedQcPlot {
         .text(d=>d);
         
         infoGroup.append("text")
-        .attr("x", that.margin.left + that.width - that.infoBoxWidth - that.rectSize)
+        .attr("x", that.margin.left + that.width - that.infoBoxWidth - that.rectSize*2)
         .attr("y", that.margin.top - 10)
         .text("SNP Genotype Data:")
         .attr("font-size", "16px")
