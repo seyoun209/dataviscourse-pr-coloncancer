@@ -23,7 +23,6 @@ class TableNonpolyp {
         }
         // extract data for table
         this.tableData = data;
-
         console.log(this.name + " init: " + this.tableData.length + " data.");
 
         // find min/max values of data
@@ -82,6 +81,7 @@ class TableNonpolyp {
                 let trow = d3.select('#table1 tbody').append("tr").attr("id", i);
                 for (let key of keyOrder) {
                     let val = d[key];
+                    
                     if (key == "sex") {
                         let className = "";
                         if (val == "M") {
@@ -128,13 +128,15 @@ class TableNonpolyp {
                     let selected = d3.select(this);
                     if (selected.classed(classkid)) {
                         selected.classed(classkid, false);
-                        let existIndex = selectedSubjectIds.indexOf(selectedSubjectId);
+                        let existIndex = selectedSubjectIds.indexOf(""+selectedSubjectId);
                         if (existIndex > -1) {
                             selectedSubjectIds.splice(existIndex, 1);
                         }
                     } else {
                         selected.classed(classkid, true);
-                        selectedSubjectIds.push(selectedSubjectId);
+                        if (selectedSubjectIds.includes(""+selectedSubjectId) == false) {
+                            selectedSubjectIds.push(""+selectedSubjectId);
+                        }
                     }
                     that.combinedQcPlot.drawSquares();
                 })
@@ -142,7 +144,6 @@ class TableNonpolyp {
         });
     }
     setCombinedQcPlot(combinedQcPlot) {
-        console.log("setCombinedQcPlot");
         this.combinedQcPlot = combinedQcPlot;
         this.drawTable();
     }
@@ -168,7 +169,7 @@ class TableNonpolyp {
             that.tooltip.html(val.toFixed(2)).style("left", x + v + "px").style("top", y - that.tooltipH - 3 + "px").transition().duration(100).style("opacity", .9);
         })
         .on("mouseout", function(d){
-            that.tooltip.transition().duration(100).style("opacity", "0")
+            that.tooltip.transition().duration(100).style("opacity", "0");
         })
     }
     
@@ -260,8 +261,14 @@ class TableNonpolyp {
     }
 
     initHeaders() {
+        // tooptip popup
+        let tooltipW = 250;
+        let tooltipH = 120;
+        let tooltip = d3.select(".description-tooltip").style("width", tooltipW+"px").style("height", tooltipH+"px");
+
         let that = this;
-        let headerTds = d3.select('#table1 thead tr:nth-child(1)').selectAll('th').data(this.headerData).enter().append('th').classed("table-header sortable", true).text(d => d.key).attr("rowspan", function(d){
+        let headerTds = d3.select('#table1 thead tr:nth-child(1)').selectAll('th').data(this.headerData).enter().append('th').classed("table-header sortable", true).text(d => d.key)
+        .attr("rowspan", function(d){
             if(d.key == 'Kinder ID' || d.key == 'Subject ID') {
                 return 2;
             } else {
@@ -273,8 +280,46 @@ class TableNonpolyp {
             } else {
                 return "*";
             }
-        }).append("i").classed("fas no-display", true);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        });
+        headerTds.append("i").classed("fas no-display", true)
+
+        headerTds.on("mousemove", function(d) {
+            let x = d.x + window.scrollX;
+            let y = d.y + window.scrollY;
+            
+            let selectedCol = this.id;
+            let header = that.headerData[selectedCol].key;
+            let title = header;
+            let body  = "";
+            if (header === "Kinder ID") {
+                body = "Family ID";
+            } else if (header === "Subject ID") {
+                body = "Individual subject";
+            } else if (header === "Sex") {
+                body = "Male and female";
+            } else if (header === "BMI") {
+                body = "Body Mass Index is a complex phenotype that may interact with genetic variants to influence colorectal cancer risk.";
+            } else if (header === "Age") {
+            } else if (header === "Smoke") {
+                body = "Cigarette smoking is an established risk factor for colorectal cancer.";
+            } else if (header === "Alcohol") {
+            } else if (header === "NASID") {
+                body = "Non-steroidal anti-inflammatory drugs- Men who used aspirin were also more likely to use the NASIDs, and the Aspirin/NSAIDs would prevent colorectal cancer and cardiovascular disease.";
+            } else if (header === "HRT") {
+                body = "Hormone Replacement Therapy- Epidemiologic studies evaluating hormone therapy use and colorectal cancer risk by the status of cell-cycle regulators are lacking.";
+            } else if (header === "Exercise") {
+                body = "Exercise will decrease the mortality and risk of recurrence for colorectal cancer.";
+            }
+            tooltip.html("<b>[" + title + "]</b><br>" + body).style("left", x - tooltipW/2 + "px").style("top", y + tooltipH/2  - 20 + "px").transition().duration(100).style("opacity", .9);
+        }).on("mouseout", function(d) {
+            tooltip.transition().duration(100).style("opacity", "0")
+        });
         
+        
+
         let placeholders = [];
         for (let i in this.headerData) {
             if ( i > 1) {
@@ -592,8 +637,8 @@ class QcDensityPlot {
         this.combinedQcPlot = combinedQcPlot;
 
         this.margin = { top: 20, right: 40, bottom: 35, left: 60 };
-        this.width = 600 - this.margin.left - this.margin.right;
-        this.height = 225 - this.margin.top - this.margin.bottom;
+        this.width = 1400 - this.margin.left - this.margin.right;
+        this.height = 300 - this.margin.top - this.margin.bottom;
 
         this.dataArray = dataArray;
         // pre-compute min, ax values across all data
@@ -614,16 +659,31 @@ class QcDensityPlot {
             }
         }
         this.kinderIds.sort();
-        this.drawDensityPlot();
         this.initKinderidButtons();
+        this.drawDensityPlot();
     }
 
     drawDensityPlot() {
-        d3.select('#qcdensity-plot')
+        let plotSvg =d3.select('#qcdensity-plot')
             .append("div").style("display", "inline-block").style("vertical-align", "top")
             .append('svg').classed('plot-svg', true)
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
+
+        let tooltipW2 = 250;
+        let tooltipH2 = 100;
+        let plotTooltip = d3.select(".plot-description-tooltip").style("width", tooltipW2 + "px").style("height", tooltipH2 + "px");
+        plotSvg.on("mousemove", function(d) {
+            let x = d.x + window.scrollX;
+            let y = d.y + window.scrollY;
+            
+            plotTooltip.html("<b>[Density Plot]</b><br>X-axis is the polygenic Risk score of 30 SNPs. Y-axis is the frequency of subjects in each family.")
+            .style("left", x - tooltipW2/2 + "px").style("top", y + tooltipH2/2  - 20 + "px")
+            .transition().duration(100).style("opacity", .9);
+        }).on("mouseout", function(d) {
+            plotTooltip.transition().duration(100).style("opacity", "0")
+        });
+
 
         this.svgGroup = d3.select('#qcdensity-plot').select('.plot-svg').append('g').classed('wrapper-group', true);
         
@@ -660,7 +720,7 @@ class QcDensityPlot {
         this.svgGroup.append('text').attr('id', 'xText');
         this.svgGroup.append('text').attr('id', 'yText');
         
-        let translateX = (0.45*this.width) + "," + (this.margin.top + this.height + 25);
+        let translateX = (0.5*this.width + this.margin.left) + "," + (this.margin.top + this.height + 25);
         let xBarLabel = this.svgGroup.select("#xText");
         xBarLabel.exit().remove();
 
@@ -668,7 +728,8 @@ class QcDensityPlot {
         xBarLabel = xBarLabel.merge(xEnter);
 
         xBarLabel.datum("Polygenic Risk Score")
-                .text(d => d.toUpperCase())
+                .text(d => d)
+                .style("text-anchor", "middle")
                 .attr("transform", "translate(" + translateX + ")")
                 .classed('x-label', true);
                     
@@ -678,7 +739,7 @@ class QcDensityPlot {
         yBarLabel = yBarLabel.merge(yEnter);
 
         yBarLabel.datum("Frequency of Subjects")
-                .text(d => d.toUpperCase())
+                .text(d => d)
                 .attr("transform", "translate(20, "+ this.height/2 +") rotate(-90)")
                 .classed('y-label', true)
                 .style("text-anchor", "middle");
@@ -708,34 +769,24 @@ class QcDensityPlot {
     initKinderidButtons() {
         let that = this;
         let width = 1000;
-        let height = 150;
-        let margin = { top: 0, right: 20, bottom: 0, left: 80 };
+        let height = 30;
+        let margin = { top: 0, right: 20, bottom: 10, left: 20 };
 
-        let buttonWidth = 75;
+        let buttonWidth = 80;
         let buttonHeight = 30;
         let buttonDiv = d3.select('#qcdensity-plot')
-            .append('div').classed('kid-buttons-group', true).style("display", "inline-block").style("vertical-align", "top")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom).append("svg").append('g')
-        
+            .append('div').classed('kid-buttons-group', true).style("margin", "0 auto").style("text-align", "center")
+            .attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("svg").attr("width", buttonWidth * this.kinderIds.length + "px").attr("height", height + margin.bottom + "px").style("margin", "0 auto").style("text-align", "center").append('g')
         
         let i = 0
         for (let kid of this.kinderIds) {
             buttonDiv.append("rect")
             .attr("class", "kid-button").attr("width", buttonWidth).attr("height", buttonHeight).attr("id", kid)
             .attr("x", function(d) {
-                if (i < 4) {
-                    return i*buttonWidth + "px";
-                } else {
-                    return (i-3.5)*buttonWidth + "px";
-                }
+                return i*buttonWidth + "px";
             })
             .attr("y", function(d){
-                if (i < 4) {
-                    return "0px";
-                } else {
-                    return buttonHeight + "px";
-                }
+                return "0px";
             }).on("click", function(d) {
                 let kinderid = d.path[0].id;
                 
@@ -764,21 +815,14 @@ class QcDensityPlot {
                 }
                 that.currentKinderid.text(selectedKinderids.join(" | "))
                 that.nonpolypTable.filterByKinderid();
+                
             });
 
             buttonDiv.append("text").attr("id", "text-"+kid).attr("class", "kid-button-text").text(kid).attr("text-anchor", "middle").attr("alignment-baseline", "middle").attr("x", function(d) {
-                if (i < 4) {
-                    return i*buttonWidth + buttonWidth/2 + "px";
-                } else {
-                    return (i-3.5)*buttonWidth + buttonWidth/2 + "px";
-                }
+                return i*buttonWidth + buttonWidth/2 + "px";
             })
             .attr("y", function(d){
-                if (i < 4) {
-                    return  buttonHeight/2 + "px";
-                } else {
-                    return buttonHeight + buttonHeight/2 + "px";
-                }
+                return  buttonHeight/2 + "px";
             })
             
             i += 1;
@@ -797,10 +841,10 @@ class CombinedQcPlot {
         this.y1 = 0;
         this.y2 = 200;
 
-        this.rectSize = 9.5;
+        this.rectSize = 13;
         this.margin = { top: 35, right: 0, bottom: 60, left: 35 };
         this.margin2 = {left: 50};
-        this.width = this.rectSize*198;
+        this.width = this.rectSize*203;
         this.height = this.rectSize*30;
         this.infoBoxWidth = 200;
 
@@ -810,10 +854,25 @@ class CombinedQcPlot {
     initHeatmap() {
         let that = this;
 
-        d3.select("#combinedqc-plot")
+        let plotSvg = d3.select("#combinedqc-plot")
             .append('svg').classed('plot-svg', true)
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
+
+            
+        let tooltipW2 = 250;
+        let tooltipH2 = 100;
+        let plotTooltip = d3.select(".plot-description-tooltip").style("width", tooltipW2 + "px").style("height", tooltipH2 + "px");
+        plotSvg.on("mousemove", function(d) {
+            let x = d.x + window.scrollX;
+            let y = d.y + window.scrollY;
+            
+            plotTooltip.html("<b>[Heatmap]</b><br>Heatmap of 30 SNP genotype data of 199 samples. 0 is Homozygous non-reference, 1 is heterozygous, and 2 is homozygous reference.")
+            .style("left", x - tooltipW2/2 + "px").style("top", y + tooltipH2/2  - 20 + "px")
+            .transition().duration(100).style("opacity", .9);
+        }).on("mouseout", function(d) {
+            plotTooltip.transition().duration(100).style("opacity", "0")
+        });
 
         this.svgGroup = d3.select('#combinedqc-plot').select('.plot-svg').append('g').classed('wrapper-group', true);
     
@@ -837,10 +896,10 @@ class CombinedQcPlot {
             .attr("y", function(d, i) {
                 return that.margin.top + (i+1)*that.rectSize;
             })
-            .style("font-size", "11px");
+            .style("font-size", "14px");
 
         this.svgGroup.append('text').attr('id', 'xText').text("Subject IDs")
-            .attr("x", this.margin.left  + this.margin2.left + this.width/2)
+            .attr("x", this.margin.left + this.width/2)
             .attr("y", this.margin.top - 5)
             .attr("text-anchor", "middle");
             
@@ -849,7 +908,7 @@ class CombinedQcPlot {
         .attr("y", this.margin.top - 5)
             .attr("text-anchor", "start");
 
-        let infoboxHeight = 25;
+        let infoboxHeight = 22;
         let infoGroup = d3.select('#combinedqc-plot').select('.plot-svg').append("g");
         infoGroup.append("rect")
             .attr("width", that.infoBoxWidth)
@@ -863,9 +922,9 @@ class CombinedQcPlot {
         infoGroup = d3.select('#combinedqc-plot').select('.plot-svg').append("g");
         let samples = [0, 1, 2]
         infoGroup.selectAll("rect").data(samples).enter().append("rect")
-        .attr("width", this.rectSize*2).attr("height", this.rectSize*2)
+        .attr("width", this.rectSize*1.5).attr("height", this.rectSize*1.5)
         .attr("x", function(d) {
-            return that.margin.left +that.infoBoxWidth / 12 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d;
+            return that.margin.left +that.infoBoxWidth / 15 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d;
         })
         .attr("y", function(d) {
             return that.margin.top - infoboxHeight - 2.;
@@ -874,17 +933,17 @@ class CombinedQcPlot {
 
         infoGroup.selectAll("text").data(samples).enter().append("text")
         .attr("x", function(d) {
-            return that.margin.left + that.infoBoxWidth / 12 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*3;
+            return that.margin.left + that.rectSize/2 + that.width - that.infoBoxWidth + that.infoBoxWidth / 3 * d + that.rectSize*3;
         })
         .attr("y", function(d) {
-            return that.margin.top - infoboxHeight + 14;
+            return that.margin.top - infoboxHeight + 12;
         })
         .text(d=>d);
         
         infoGroup.append("text")
         .attr("x", that.margin.left + that.width - that.infoBoxWidth - that.rectSize)
         .attr("y", that.margin.top - 10)
-        .text("Number of Samples:")
+        .text("SNP Genotype Data:")
         .attr("font-size", "16px")
         .attr("text-anchor", "end");
     }
@@ -908,7 +967,6 @@ class CombinedQcPlot {
                 let patent_id = d2.patent_id;
                 if (selectedSubjectIds.length > 0) {
                     if (selectedSubjectIds.includes(patent_id)) {
-                        console.log(patent_id)
                         return "qc-"+d2.num_samples + " qc-selected";
                     }
                     return "qc-"+d2.num_samples + " qc-unselected";
