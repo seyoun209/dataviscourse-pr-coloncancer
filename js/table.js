@@ -405,7 +405,7 @@ class TablePolyp {
     constructor(headers, data) {
         this.name = "TablePolyp";
         this.polypPositions = {"right": [38 ,250], "left": [360, 250], 
-        "transverse": [200, 150], "cecum": [73, 352], "sigmoid": [330, 360], "hepatic flexure": [48, 135], 'splenic flexure': [350, 135], "ileum": [195, 335], "anus": [198, 420]
+            "transverse": [200, 150], "cecum": [73, 352], "sigmoid": [330, 360], "hepatic flexure": [48, 135], 'splenic flexure': [350, 135], "ileum": [195, 335], "anus": [198, 420]
         };
         
         let offsetY = 70;
@@ -622,7 +622,7 @@ class TablePolyp {
         imgContainer.append("svg:image")
             .attr("width", "100%").attr("height", "90%").attr("id", "colon-image")
             .attr("x", "0%").attr("y", "5%")
-            .attr("xlink:href", "../assets/colon.png");
+            .attr("xlink:href", "/../assets/colon.png");
     }
     drawInfoTables() {
         // table to display polyp size info
