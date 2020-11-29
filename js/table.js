@@ -622,7 +622,7 @@ class TablePolyp {
         imgContainer.append("svg:image")
             .attr("width", "100%").attr("height", "90%").attr("id", "colon-image")
             .attr("x", "0%").attr("y", "5%")
-            .attr("xlink:href", "/../assets/colon.png");
+            .attr("xlink:href", "./../assets/colon.png");
     }
     drawInfoTables() {
         // table to display polyp size info
