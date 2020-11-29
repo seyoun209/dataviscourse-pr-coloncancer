@@ -619,10 +619,10 @@ class TablePolyp {
         let w = 519;
         let h = 483;
         let imgContainer = d3.select('#colon-interactive');
-        imgContainer.append("svg:image")
-            .attr("width", "100%").attr("height", "90%").attr("id", "colon-image")
-            .attr("x", "0%").attr("y", "5%")
-            .attr("xlink:href", "./../assets/colon.png");
+        // imgContainer.append("svg:image")
+        //     .attr("xlink:href", "./../assets/colon.png")
+        //     .attr("width", "100%").attr("height", "90%").attr("id", "colon-image")
+        //     .attr("x", "0%").attr("y", "5%");
     }
     drawInfoTables() {
         // table to display polyp size info
