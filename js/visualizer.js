@@ -671,12 +671,16 @@ class QcDensityPlot {
                 this.kinderIds.push(d.key);
             }
         }
+        this.tooltipDisplayed = false;
+
         this.kinderIds.sort();
         this.initKinderidButtons();
         this.drawDensityPlot();
+
     }
 
     drawDensityPlot() {
+        let that = this;
         let plotSvg =d3.select('#qcdensity-plot')
             .append("div").style("display", "inline-block").style("vertical-align", "top")
             .append('svg').classed('plot-svg', true)
@@ -689,10 +693,21 @@ class QcDensityPlot {
         plotSvg.on("mousemove", function(d) {
             let x = d.x + window.scrollX;
             let y = d.y + window.scrollY;
+            if (that.tooltipDisplayed) {
+                setTimeout(function(){
+                    plotTooltip
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 0);
+                    that.tooltipDisplayed = false;
+                }, 1500);
+            }
             
             plotTooltip.html("<b>[Density Plot]</b><br>X-axis is the polygenic Risk score of 30 SNPs. Y-axis is the frequency of subjects in each family.")
             .style("left", x - tooltipW2/2 + "px").style("top", y + tooltipH2/2  - 20 + "px")
             .transition().duration(100).style("opacity", .9);
+            that.tooltipDisplayed = true;
+
         }).on("mouseout", function(d) {
             plotTooltip.transition().duration(100).style("opacity", "0")
         });
@@ -852,6 +867,7 @@ class CombinedQcPlot {
         this.x2 = 400;
         this.y1 = 0;
         this.y2 = 200;
+        this.tooltipDisplayed = false;
 
         this.rectSize = 8.75;
         this.margin = { top: 35, right: 10, bottom: 60, left: 25 };
@@ -861,6 +877,7 @@ class CombinedQcPlot {
         this.infoBoxWidth = 180;
         this.initHeatmap();
         this.drawSquares();
+
     }
     initHeatmap() {
         let that = this;
@@ -874,15 +891,27 @@ class CombinedQcPlot {
         let tooltipW2 = 250;
         let tooltipH2 = 100;
         let plotTooltip = d3.select(".plot-description-tooltip").style("width", tooltipW2 + "px").style("height", tooltipH2 + "px");
-        plotSvg.on("mousemove", function(d) {
+        plotSvg.on("mouseover", function(d) {
             let x = d.x + window.scrollX;
             let y = d.y + window.scrollY;
-            
+            if (that.tooltipDisplayed) {
+                setTimeout(function(){
+                    plotTooltip
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 0);
+                    that.tooltipDisplayed = false;
+                }, 1500);
+            }
+
             plotTooltip.html("<b>[Heatmap]</b><br>Heatmap of 30 SNP genotype data of 198 samples. 0 is Homozygous non-reference, 1 is heterozygous, and 2 is homozygous reference.")
             .style("left", x - tooltipW2/2 + "px").style("top", y + tooltipH2/2  - 20 + "px")
             .transition().duration(100).style("opacity", .9);
+            that.tooltipDisplayed = true;
+            
         }).on("mouseout", function(d) {
-            plotTooltip.transition().duration(100).style("opacity", "0")
+            plotTooltip.transition().duration(100).style("opacity", "0");
+
         });
 
         this.svgGroup = d3.select('#combinedqc-plot').select('.plot-svg').append('g').classed('wrapper-group', true);
