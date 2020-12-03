@@ -1,12 +1,13 @@
 ## Utah Population-based Genetic and Clinical Feature in Colorectal Cancer 
 ### [Seyoun Byun](https://www.linkedin.com/in/seyoun-b-860a4380/) (u0693520), [Hyojoon Park](https://hjoonpark.github.io/) (u1266489)
 
-### Links
-1. [Project website](https://seyoun209.github.io/dataviscourse-pr-coloncancer/)
-2. [Video](https://youtu.be/PkfstrFtwyQ)
 ---
 
-### Dataset and visualization
+## Links
+1. [Project website](https://seyoun209.github.io/dataviscourse-pr-coloncancer/)
+2. [Video](https://youtu.be/PkfstrFtwyQ)
+
+## Dataset and visualization
 Two views `Genetic & Multivariate`(index.html) and `Polyp`(polyps.html) are used, where the first view visualizes:
 
 1. Table 1: visualizes Kinder ID, Subject ID, Sex, BMI, Age, Smoke, Alcohol, NASID, HRT, and Exercise
@@ -18,7 +19,7 @@ and the second view visualizes:
 1. Table 2: visualizes Kinder ID, Subject ID, Site, Type, and Size,
 2. Polyp image: visualizes a colon on which polyps of each subject are rendered with respective size, type, and location.
 
-### Code organization
+## Code organization
 
 Two `.js` files are used to 1. load and 2. visualize the data.
 
@@ -32,4 +33,4 @@ Two `.js` files are used to 1. load and 2. visualize the data.
 
 Lastly, `styles.css` contains the style properties.
 
-For more details, please refer to the [project website](https://seyoun209.github.io/dataviscourse-pr-coloncancer/).
+### For more details, please refer to the [project website](https://seyoun209.github.io/dataviscourse-pr-coloncancer/).
