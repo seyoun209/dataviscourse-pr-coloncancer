@@ -8,7 +8,7 @@
 2. [Video](https://youtu.be/PkfstrFtwyQ)
 
 ## Dataset and visualization
-Two views `Genetic & Multivariate`(index.html) and `Polyp`(polyps.html) are used, where the first view visualizes:
+Two views <strong>Genetic & Multivariate</strong> `index.html` and <strong>Polyp</strong> `polyps.html` are used, where the first view visualizes:
 
 1. Table 1: visualizes Kinder ID, Subject ID, Sex, BMI, Age, Smoke, Alcohol, NASID, HRT, and Exercise
 2. Density plot: visualizes respective the polygenic risk scores (x-axis) and the respective frequency of subjects (y-axis).
